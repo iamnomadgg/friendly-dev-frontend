@@ -6,5 +6,5 @@ export type Project = {
   url: string;
   date: string;
   category: string;
-  feature: boolean;
+  featured: boolean;
 };
