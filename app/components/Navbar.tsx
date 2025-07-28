@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router';
-import { FaLaptopCode } from 'react-icons/fa';
+import { FaLaptopCode, FaTimes, FaBars } from 'react-icons/fa';
 
 const Navbar = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const base = 'transition hover:text-blue-400';
   const active = 'text-blue-400 font-semibold';
   return (
@@ -49,7 +51,58 @@ const Navbar = () => {
             </NavLink>
           </div>
         </div>
+
+        <div className="md:hidden flex items-center-gap-4">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="text-blue-400 text-xl cursor-pointer"
+            title="Menu"
+          >
+            {mobileMenuOpen ? <FaTimes /> : <FaBars />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Nav */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-gray-800 border-t border-gray-700 px-6 py-4 space-y-2 space-x-4 text-center">
+          <NavLink
+            className={({ isActive }) => (isActive ? active : base)}
+            to="/"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Home
+          </NavLink>
+          <NavLink
+            className={({ isActive }) => (isActive ? active : base)}
+            to="/projects"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Projects
+          </NavLink>
+          <NavLink
+            className={({ isActive }) => (isActive ? active : base)}
+            to="/blog"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Blog
+          </NavLink>
+          <NavLink
+            className={({ isActive }) => (isActive ? active : base)}
+            to="/about"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            About
+          </NavLink>
+          <NavLink
+            className={({ isActive }) => (isActive ? active : base)}
+            to="/contact"
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            Contact
+          </NavLink>
+        </div>
+      )}
     </nav>
   );
 };
