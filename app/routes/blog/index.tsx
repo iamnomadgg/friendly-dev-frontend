@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Route } from './+types/index';
 import PostCard from '~/components/PostCard';
 import Pagination from '~/components/Pagination';
+import PostFilter from '~/components/PostFilter';
 import type { PostMeta } from '~/types';
 
 export async function loader({
@@ -19,22 +20,47 @@ export async function loader({
 
 const BlogPage = ({ loaderData }: Route.ComponentProps) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState('');
   const { posts } = loaderData;
+
+  //Filter projects based on the category
+  const filteredPosts =
+    searchQuery === ''
+      ? posts
+      : posts.filter(
+          (post) =>
+            post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+
   //Calculate total pages
   const postsPerPage = 10;
-  const totalPages = Math.ceil(posts.length / postsPerPage);
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 
   //Get current page's projects
   const indexOfLast = currentPage * postsPerPage;
   const indexOfFirst = indexOfLast - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirst, indexOfLast);
+  const currentPosts = filteredPosts.slice(indexOfFirst, indexOfLast);
 
   return (
     <div className="max-w-3xl mx-auto mt-10 px-6 py-6 bg-gray-900">
       <h2 className="text-3xl text-white font-bold mb-8">Blog</h2>
-      {currentPosts.map((post) => (
-        <PostCard key={post.slug} post={post} />
-      ))}
+      <PostFilter
+        searchQuery={searchQuery}
+        onSearchChange={(query) => {
+          setSearchQuery(query);
+          setCurrentPage(1);
+        }}
+      />
+
+      <div className="space-y-8">
+        {currentPosts.length === 0 ? (
+          <p className="text-gray-400 text-center">No posts found</p>
+        ) : (
+          currentPosts.map((post) => <PostCard key={post.slug} post={post} />)
+        )}
+      </div>
+
       <Pagination
         totalPages={totalPages}
         currentPage={currentPage}
