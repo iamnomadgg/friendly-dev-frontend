@@ -1,6 +1,7 @@
 import type { Project } from '~/types';
 import type { Route } from './+types/index';
 import FeaturedProjects from '~/components/FeaturedProjects';
+import AboutPreview from '~/components/AboutPreview';
 
 export async function loader({
   request,
@@ -16,6 +17,7 @@ const HomePage = ({ loaderData }: Route.ComponentProps) => {
   return (
     <>
       <FeaturedProjects projects={projects} count={2} />
+      <AboutPreview />
     </>
   );
 };
