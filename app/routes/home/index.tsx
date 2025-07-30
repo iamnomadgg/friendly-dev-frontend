@@ -3,11 +3,11 @@ import AboutPreview from '~/components/AboutPreview';
 import LatestPosts from '~/components/LatestPosts';
 import type { Route } from './+types/index';
 import type { Project, StrapiProject, StrapiResponse } from '~/types';
-import type { PostMeta } from '~/types';
+import type { Post } from '~/types';
 
 export async function loader({
   request,
-}: Route.LoaderArgs): Promise<{ projects: Project[]; posts: PostMeta[] }> {
+}: Route.LoaderArgs): Promise<{ projects: Project[]; posts: Post[] }> {
   const url = new URL('/posts-meta.json', request.url);
 
   const [projectRes, postRes] = await Promise.all([

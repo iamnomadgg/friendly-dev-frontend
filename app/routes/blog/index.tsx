@@ -3,11 +3,11 @@ import type { Route } from './+types/index';
 import PostCard from '~/components/PostCard';
 import Pagination from '~/components/Pagination';
 import PostFilter from '~/components/PostFilter';
-import type { PostMeta, StrapiResponse, StrapiPost } from '~/types';
+import type { Post, StrapiResponse, StrapiPost } from '~/types';
 
 export async function loader({
   request,
-}: Route.LoaderArgs): Promise<{ posts: PostMeta[] }> {
+}: Route.LoaderArgs): Promise<{ posts: Post[] }> {
   const res = await fetch(
     `${import.meta.env.VITE_API_URL}/posts?populate=image&sort=date:desc`
   );
@@ -18,12 +18,11 @@ export async function loader({
 
   const posts = json.data.map((item) => ({
     id: item.id,
-    // documentId: item.documentId,
     title: item.title,
     slug: item.slug,
     excerpt: item.excerpt,
     date: item.date,
-    // body: item.body,
+    body: item.body,
     image: item.image?.url
       ? `${import.meta.env.VITE_STRAPI_URL}${item.image.url}`
       : '/images/no-image.png',
